@@ -1,0 +1,673 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ibnu Developers</title>
+        <link rel="stylesheet" href="style.css">
+
+        <meta name="referrer" content="no-referrer">
+        <meta http-equiv="permissions-policy" content="
+        geolocation=(),
+        camera=(),
+        microphone=(),
+        payment=(),
+        usb=(),
+        accelerometer=(),
+        gyroscope=(),
+        magnetometer=()">
+
+
+        <style>
+            html{
+                scroll-behavior: smooth;
+            }
+            body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #f7f7f7;
+                display: flex;
+                min-height: 100vh;
+                overflow-x: hidden;
+            }
+
+            .loader{
+                position: fixed;
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+                transition: 1s;
+            }
+
+            .loader.hide{
+                opacity: 0;
+                visibility: hidden;
+            }
+
+            .pulse{
+                width: 70px;
+                height: 70px;
+                background: #0ea5e9;
+                border-radius: 50%;
+                animation: pulse 1.5s infinite;
+            }
+
+            @keyframes pulse{
+                0%{transform: scale(.7); opacity: .4;}
+                50%{transform: scale(1.2); opacity: 1;}
+                100%{transform: scale(.7); opacity: .4;}
+            }
+           
+            .title1{
+                font-family: 'Segoe UI', sans-serif;
+                text-shadow: -2px 2px 15px cyan;
+            }
+
+            header {
+                position: relative;
+                height: 40vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                color: white;
+                overflow: hidden;
+                text-shadow: 0 2px 8px rgba(0,0,0,.6);
+            }
+
+            header::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("img/nasihah.jpg");
+                border-radius: 8px;
+                background-position: center center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-color: #e9e9e9;
+                z-index: 0;
+                transform: translateZ(0);
+                image-rendering: auto;
+                animation: float 5s ease-in-out infinite;
+
+            }
+            @keyframes float{
+                0%{transform:translateY(0);}
+                50%{transform:translateY(-14px);}
+                100%{transform:translateY(0);}
+            }
+
+            header > * {
+                position: relative;
+                z-index: 1;
+            }
+
+            header h1 {
+                margin-top: 80px;
+                align-self: flex-end;
+                padding-bottom: 20px;
+                float: inline-end;
+            }
+
+            .eyebrow{
+                font-family: 'work sans','segoe ui',sans-serif;
+                font-size:1.00rem;
+                letter-spacing:0.2em;
+                text-transform:uppercase;
+                font-weight:600;
+                color:#7C5E22;
+            }
+
+            .container-main{
+                background-color: #F5EFDD; 
+                border-radius: 8px;
+            }
+            .container-main p, h2{
+               padding: 0 7px;
+               font-family: 'Segoe UI', sans-serif;
+            }
+
+            h2{
+                font-family: 'times new roman','segoe ui',sans-serif;
+                font-weight: 600;
+            }
+
+            p{
+                font-family: 'Segoe UI', 'Cormorant Garamond',Georgia,'Times New Roman',serif;
+                font-size: 1.05rem;
+                line-height: 1.85;
+                margin-bottom: 1.3rem;
+                
+              
+            }
+
+            .sidenav {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: 220px;
+                background: linear-gradient(135deg, white 5% #1F3A5F 100%);
+                border-right: 1px solid #ccc;
+                flex-shrink: 0;
+                min-height: 100vh;
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100vh;
+                z-index: 100;
+                transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+                overflow-y: auto;
+            }
+
+            body.sidenav-collapsed .sidenav {
+                transform: translateX(-100%);
+            }
+
+            .sidenav li a {
+                display: block;
+                color: #ffffff;
+                padding: 12px 16px;
+                text-decoration: none;
+                cursor: pointer;
+                transition: background-color 0.3s ease, color 0.3s ease, transform 0.25s ease, padding-left 0.25s ease;
+            }
+
+            .sidenav li a.active {
+                background-color: #04AA6D;
+                color: white;
+            }
+
+            .sidenav li a:hover:not(.active) {
+                background-color: #555;
+                color: white;
+                transform: translateX(4px);
+            }
+
+            .main-content {
+                flex: 1;
+                padding: 20px 30px;
+                min-width: 0;
+                margin-left: 220px;
+            }
+
+            .page {
+                display: none;
+            }
+
+            .page.active {
+                display: block;
+            }
+
+            h3 {
+                width: auto;
+                color: blue;
+                text-align: center;
+                margin-top: 20px;
+            }
+
+            .container-img {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+            }
+
+            img {
+                display: block;
+                border: 5px solid rgb(98, 124, 238);
+                box-shadow: 0 10px 25px rgb(219, 0, 0);
+                transition: box-shadow 0.3s ease;
+                background: white;
+                max-width: 100%;
+                height: auto;
+                transition:all .5s ease;
+            }
+
+            img:hover {
+                box-shadow: 0 10px 25px rgb(0, 219, 0);
+                transform:translateY(-10px);
+            }
+
+            .menu-toggle {
+                display: flex;
+                position: fixed;
+                top: 50%;
+                left: 12px;
+                transform: translateY(-50%);
+                z-index: 1200;
+                width: 50px;
+                height: 50px;
+                border: none;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #04AA6D, #1e7f5a);
+                color: white;
+                font-size: 20px;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.24);
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                pointer-events: auto;
+            }
+
+            @media screen and (max-width: 600px) {
+                body {
+                    flex-direction: row;
+                }
+
+                body.sidenav-collapsed .sidenav {
+                    transform: translateX(calc(-100% - 16px));
+                }
+
+                .sidenav {
+                    position: fixed;
+                    left: 10px;
+                    top: 10px;
+                    height: calc(100vh - 20px);
+                    width: min(80vw, 280px);
+                    max-width: 280px;
+                    transform: translateX(calc(-100% - 12px));
+                    opacity: 0;
+                    z-index: 1000;
+                    border: 1px solid rgba(0, 0, 0, 0.08);
+                    border-radius: 18px;
+                    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.18);
+                    backdrop-filter: blur(10px);
+                    will-change: transform, opacity;
+                }
+
+                .main-content {
+                    margin-left: 0;
+                }
+
+                .sidenav.open {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+
+                .sidenav li a {
+                    text-align: left;
+                    padding: 14px 16px;
+                }
+
+                .main-content {
+                    padding: 70px 15px 15px;
+                    width: 100%;
+                    box-sizing: border-box;
+                }
+
+                .menu-toggle {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+            }
+
+            .card1{
+                width: auto;
+                max-width: 100%;
+                backdrop-filter: blur(20px);
+                border-radius: 24px;
+                padding: 10px 12px;
+                color:white;
+                position: relative;
+                overflow: hidden;
+                box-shadow: 0 20px 50px rgba(0,0,0,.35);
+            }
+
+            .card::before{
+                content: "";
+                position: absolute;
+                width: 220px;
+                height: 220px;
+                background-color: #18b68d;
+                border-radius: 50%;
+                top:-120px;
+                right:-120px;
+                opacity: .18;
+            }
+            .card::after{
+                content: "";
+                position: absolute;
+                width: 170px;
+                height: 170px;
+                background: #ffd166;
+                border-radius: 50%;
+                bottom:-90px;
+                left: -90px;
+                opacity: .12;
+            }
+            .arabic{
+                font-family: 'Aniri',serif;
+                font-size: 32px;
+                line-height: 2;
+                text-align: right;
+                margin: 20px 0;
+                color: black;
+            }
+            .translation{
+                text-align: center;
+                color: black;
+                line-height: 1.8;
+                font-size: 16px;
+            }
+            .footer{
+                margin-top: 30px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                color: black;
+                font-size: 14px;
+            }
+
+            .sanad-box {
+                background:aliceblue;
+                border: 1px solid rgba(124,94,34,0.25);
+                padding: 2.4 rem 2rem;
+                border-radius: 8px;
+            }    
+            .sanad-title {
+                font-size:1.3rem;
+                margin-bottom:0.4rem;
+                color:#241C10
+            }
+            .sanad-caption {
+                color: #89AE8E;
+                font-size:0.88rem;
+                margin-bottom:1.8rem;
+                line-height:1.6;
+                max-width:none;
+                text-align:center;
+            }
+            .sanad-item {
+                display:flex;
+                gap:1.1rem;
+                align-items:flex-start;
+            }
+            .sanad-marker {
+                position:relative;
+                width:14px;
+                flex-shrink:0;
+                display:flex;
+                justify-content:center;
+                margin-top:0.25rem;
+            }
+             .sanad-marker::before {
+                content:'';
+                position:absolute;
+                top:16px;
+                bottom:-2rem;
+                left:50%;
+                width:1.5px;
+                background: rgba(124,94,34,0.25);
+                transform:translateX(-50%);
+            }
+             .sanad-item:last-child .sanad-marker::before {
+                display:none;
+            }
+            .sanad-node {
+                width:14px;
+                height:14px;
+                border:1.5px solid #A9822F;
+                border-radius:50%;
+                background: #EAE0C4;
+                flex-shrink:0;
+            }
+            .sanad-item:last-child .sanad-node {
+                background: #A9822F;
+            }
+            .sanad-content {
+                padding-bottom:2rem;
+            }
+            .sanad-item:last-child .sanad-content {
+                padding-bottom:0;
+            }
+            .sanad-gen {
+                display:block;
+                font-family: 'Cormorant Garamond',Georgia,'Times New Roman',serif;
+                font-weight:600;
+                font-size:1.1rem;
+                color: #241C10;
+            }
+            .sanad-desc {
+                display:block;
+                font-size:0.86rem;
+                color: #5C5238;
+                margin-top:0.15rem;
+                max-width:none;}
+
+        </style>
+    </head>
+    <body>
+        <!-- Loader -->
+        <div class="loader">
+            <div class="pulse"></div>
+        </div>
+
+      <button class="menu-toggle" onclick="toggleSidenav()" aria-label="Toggle navigation">☰</button>
+
+      <ul class="sidenav" id="sidenav">
+        <li><a class="active" href="#home" data-page="home" onclick="showPage('home'); return false;">Home</a></li>
+        <li><a href="product.html">Product</a></li>
+        <li><a href="#hadist" data-page="hadist" onclick="showPage('hadist'); return false;">Hadist</a></li>
+        <li><a href="profile.html">About developers</a></li>
+      </ul>
+
+      <div class="main-content">
+        <div id="home" class="page active">
+            <h2 class="title1"><b style="color: rgb(116, 154, 236);"><a href="https://www.youtube.com/@rodjalive" target="_blank">Manhaj </b><b style="color: rgb(62, 247, 71);">Salaf</b></a></h2>
+            <header></header>
+            <br><br>
+
+            <div class="container-main">
+            <p class="eyebrow">Landasan Pemahaman</p>
+
+            <h2>Apa itu Manhaj Salaf?</h2>
+            <p>Kata <em style="color: blue;">"Salaf"</em> secara bahasa bermakna orang-orang yang terdahulu. Dalam istilah syariat, ia merujuk pada tiga generasi terbaik umat Islam: para sahabat Nabi ﷺ, tabi'in (generasi setelah sahabat), dan tabi'ut tabi'in (generasi setelah tabi'in) —
+                 sebagaimana disebutkan langsung oleh Rasulullah ﷺ dalam sabdanya:</p>
+
+            <blockquote class="hadith-quote">
+                <p class="arabic" lang="ar" dir="rtl">خَيْرُ النَّاسِ قَرْنِي، ثُمَّ الَّذِينَ يَلُونَهُمْ، ثُمَّ الَّذِينَ يَلُونَهُمْ</p>
+                <p class="translation">"Sebaik-baik manusia adalah generasiku (para sahabat), kemudian generasi setelah mereka (tabi'in), kemudian generasi setelah mereka lagi (tabi'ut tabi'in)."</p>
+                <cite><b style="color: #7C5E22;">Muttafaq 'alaih — HR. Bukhari dan Muslim</b></cite>
+            </blockquote>
+            </div>
+             <br><br>
+                <p>Manhaj Salaf bukanlah aliran atau golongan baru,
+                     melainkan sebuah metode dalam memahami dan mengamalkan Islam: kembali kepada Al-Qur'an dan As-Sunnah yang shahih, dengan pemahaman generasi terbaik tersebut sebagai penerang jalan —
+                      bukan ditafsirkan sendiri menurut logika maupun kepentingan zaman.</p>
+            <br>
+            
+            <div class="card1">
+                <div class="arabic">وَمَن يُشَاقِقِ ٱلرَّسُولَ مِنۢ بَعْدِ مَا تَبَيَّنَ لَهُ ٱلْهُدَىٰ وَيَتَّبِعْ غَيْرَ سَبِيلِ ٱلْمُؤْمِنِينَ نُوَلِّهِۦ مَا تَوَلَّىٰ وَنُصْلِهِۦ جَهَنَّمَ ۖ وَسَآءَتْ مَصِيرًا ١١٥</div>
+                <div class="translation">
+                    Dan barang siapa menentang Rasul (Muhammad) setelah jelas kebenaran baginya, dan mengikuti jalan yang bukan jalan orang-orang mukmin, Kami biarkan dia dalam kesesatan yang telah dilakukannya itu dan akan Kami masukkan dia ke dalam neraka Jahanam, dan itu seburuk-buruk tempat kembali.
+                </div>
+                <div class="footer">
+                    <span>QS. An-Nisa' (4): 115</span>
+                </div>
+            </div>
+            <br><br>
+
+            <p>Marilah kita ingat sebuah ayat yang sangat indah yang akan menunjukkan jalan untuk memecahkan segala macam masalah.</p>
+            <br>
+
+            <div class="card1">
+                <div class="arabic">
+يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ أَطِيعُوا۟ ٱللَّهَ وَأَطِيعُوا۟ ٱلرَّسُولَ وَأُو۟لِى ٱلْأَمْرِ مِنكُمْ ۖ فَإِن تَنَـٰزَعْتُمْ فِى شَىْءٍۢ فَرُدُّوهُ إِلَى ٱللَّهِ وَٱلرَّسُولِ إِن كُنتُمْ تُؤْمِنُونَ بِٱللَّهِ وَٱلْيَوْمِ ٱلْـَٔاخِرِ ۚ ذَٰلِكَ خَيْرٌۭ وَأَحْسَنُ تَأْوِيلًا ٥٩</div>
+                <div class="translation">
+                    Dan barang siapa menentang Rasul (Muhammad) setelah jelas kebenaran baginya, dan mengikuti jalan yang bukan jalan orang-orang mukmin, Kami biarkan dia dalam kesesatan yang telah dilakukannya itu dan akan Kami masukkan dia ke dalam neraka Jahanam, dan itu seburuk-buruk tempat kembali.
+                </div>
+                <div class="footer">
+                    <span>QS. An-Nisa' (4): 59</span>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="card1">
+                <div class="arabic">
+وَمَا ٱخْتَلَفْتُمْ فِيهِ مِن شَىْءٍۢ فَحُكْمُهُۥٓ إِلَى ٱللَّهِ ۚ ذَٰلِكُمُ ٱللَّهُ رَبِّى عَلَيْهِ تَوَكَّلْتُ وَإِلَيْهِ أُنِيبُ ١٠</div>
+                <div class="translation">
+                    Dan apa pun yang kamu perselisihkan padanya tentang sesuatu, keputusannya (terserah) kepada Allah. (Yang memiliki sifat-sifat demikian) itulah Allah Tuhanku. Kepada-Nya aku bertawakal dan kepada-Nya aku kembali.
+                </div>
+                <div class="footer">
+                    <span>QS. Asy-Syura (42): 10</span>
+                </div>
+            </div>
+
+            <br><br>
+
+            <p>Kemudian apabila kalian berselisih dalam suatu perkara maka kembalikanlah kepada Allah dan Rasul. Kalimat tersebut maknanya adalah kembali merujuk kepada Kitabullah dan sunnah Rasul-Nya, demikianlah tafsiran Mujahid dan para ulama salaf yang lain.</p>
+            <p>Kemudian Imam Ibnu Katsir berkata, “Ini merupakan perintah dari Allah ‘azza wa jalla bahwa segala sesuatu yang diperselisihkan oleh manusia yang berkaitan dengan permasalahan pokok-pokok agama maupun cabang-cabangnya hendaknya perselisihan tentang hal itu harus dikembalikan kepada Al Kitab dan As Sunnah.</p>
+            <p>Maka segala keputusan yang diambil oleh Al Kitab dan As Sunnah serta dipersaksikan keabsahannya oleh keduanya itulah al haq (kebenaran). Dan tidak ada sesudah kebenaran melainkan kesesatan…”  (lihat Tafsir Al Qur’an Al ‘Azhim, II/250).</p>
+            <p>Shahabat, tabi’in dan juga para Imam yang telah diakui kredibilitasnya di dalam Islam yaitu mereka yang senantiasa menghidupkan sunnah dan berjuang membasmi bid’ah (lihat Al Wajiz, hal. 21).</p>
+            <p>Syaikh Salim Al Hilaly hafizhahullah menerangkan, “Adapun secara terminologi kata salaf berarti sebuah karakter yang melekat secara mutlak pada diri para sahabat radhiyallahu ‘anhum. Adapun para ulama sesudah mereka juga tercakup dalam istilah ini karena sikap dan cara beragama mereka yang meneladani para sahabat.” (Limadza, hal. 30).</p>
+            <p>Syaikh Doktor Nashir bin Abdul Karim Al ‘Aql mengatakan, “Salaf adalah generasi awal umat ini, yaitu para sahabat, tabi’in dan para imam pembawa petunjuk pada tiga kurun yang mendapatkan keutamaan (sahabat, tabi’in dan tabi’ut tabi’in). Dan setiap orang yang meneladani dan berjalan di atas manhaj mereka di sepanjang masa disebut sebagai salafi sebagai bentuk penisbatan terhadap mereka.” (Mujmal Ushul Ahlis Sunnah wal Jama’ah fil ‘Aqidah, hal. 5-6).</p>
+            <p>Al Qalsyani mengatakan di dalam kitabnya Tahrirul Maqalah min Syarhir Risalah, “Adapun Salafush shalih, mereka itu adalah generasi awal (Islam) yang mendalam ilmunya serta meniti jalan Nabi shallallahu ‘alaihi wa sallam dan senantiasa menjaga Sunnah beliau. Allah ta’ala telah memilih mereka untuk menemani Nabi-Nya dan menegakkan agama-Nya."</p>
+
+
+            <div class="sanad-box">
+                <h3 class="sanad-title">Rantai Ilmu yang terjaga</h3>
+                <p class="sanad-caption">Ilmu agama sampai kepada kita melalui sanad - rantai penyampaian dari satu generasi ke generasi, terjaga dan dapat dipertanggung jawabkan</p>
+                <ol class="sanad">
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>
+                        <div class="sanad-content"><span class="sanad-gen">Rasulullah ﷺ</span><span class="desc">Sumber wahyu dan teladan utama umat</span> </div>
+                    </li>
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>
+                        <div class="sanad-content"><span class="sanad-gen">Para Sahabat</span><span class="desc">Menyaksikan dan Menyampaikan langsung risalah Nabi ﷺ</span> </div>
+                    </li>
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>
+                        <div class="sanad-content"><span class="sanad-gen">Tabi'in</span><span class="desc">Belajar langsung dari generasi sahabat</span> </div>
+                    </li>
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>
+                        <div class="sanad-content"><span class="sanad-gen">Tabi'ut Tabi'in</span><span class="desc">Menjaga pemahaman generasi sebelumnya</span> </div>
+                    </li>
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>
+                        <div class="sanad-content"><span class="sanad-gen">Ulama Ahlus Sunnah</span><span class="desc">Meneruskan dan menjaga sanad ilmu antar generasi</span> </div>
+                    </li>
+                    <li class="sanad-item">
+                        <span class="sanad-marker"><span class="sanad-node"></span></span>  
+                        <div class="sanad-content"><span class="sanad-gen">Kita, hari ini</span><span class="desc">Meneruskan ilmu dengan pemahaman yang sama</span> </div>
+                    </li>
+                </ol>
+            </div>
+            <br>
+
+
+
+
+        
+      <script>
+        const sidenav = document.getElementById('sidenav');
+        const links = document.querySelectorAll('.sidenav a');
+
+        function toggleSidenav() {
+            const isCollapsed = document.body.classList.toggle('sidenav-collapsed');
+            sidenav.classList.toggle('open', !isCollapsed);
+            if (window.innerWidth <= 600) {
+                sidenav.style.pointerEvents = !isCollapsed ? 'auto' : 'none';
+            }
+        }
+
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+
+            links.forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const activeLink = document.querySelector(`.sidenav a[data-page="${pageId}"]`);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+
+            if (window.innerWidth <= 600) {
+                sidenav.classList.remove('open');
+            }
+        }
+
+        links.forEach(link => {
+            link.addEventListener('click', function () {
+                if (this.getAttribute('href') && this.getAttribute('href').startsWith('#')) {
+                    showPage(this.getAttribute('data-page'));
+                }
+            });
+        });
+
+        window.onload=()=>{
+            setTimeout(()=>{
+                document.querySelector(".loader").classList.add("hide");
+            },1500);
+
+            //web protect
+            document.addEventListener("contextmenu", e=>{
+                e.preventDefault();
+            });
+            document.addEventListener("dragstart", e=>{
+                e.preventDefault();
+            });
+             document.addEventListener("copy", e=>{
+                e.preventDefault();
+            });
+             document.addEventListener("paste", e=>{
+                e.preventDefault();
+            });
+             document.addEventListener("dragstart", e=>{
+                e.preventDefault();
+            });
+
+            document.addEventListener("keydown", function(e){
+
+                if(e.key==="F12"){
+                    e.preventDefault();
+                }
+
+                if(e.ctrlKey && e.shiftKey && ["I", "J", "C", "K"].includes(e.key.toUpperCase())){
+                    e.preventDefault();
+                }
+
+                if(e.ctrlKey && ["U", "S", "P"].includes(e.key.toUpperCase())){
+                    e.preventDefault();
+                }
+
+            });
+
+            setInterval(()=>{
+                if(
+                    window.outerWidth-window.innerWidth>160 ||
+                    window.outerHeight-window.innerHeight>160
+                ){
+                    document.body.innerHTML="<h1 style='color:red;text-align:center;margin-top:20%;'>Developer Tools Terdeteksi</h1>";
+                }
+            },1000);
+
+            setInterval(()=>{
+                console.clear();
+            },500);
+
+            document.addEventListener("mousedown", function(e){
+                if(e.button===1){
+                    e.preventDefault();
+                }
+            });
+            
+        }
+      </script>
+    </body>
+</html>
