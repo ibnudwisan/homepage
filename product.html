@@ -131,9 +131,9 @@
                 }
             });
 
-            var close = document.getElemenntsByClassName("closebtn");
+            var close = document.getElementsByClassName("closebtn");
             var i;
-            for(i = 0; i < close.lenght; i++){
+            for(i = 0; i < close.length; i++){
                 close[i].onclick = function(){
                     var div = this.parentElement;
                     div.style.opacity = "0";
